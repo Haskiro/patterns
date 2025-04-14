@@ -1,4 +1,5 @@
 export abstract class Beverage {
+
     constructor(private description: string) {}
 
     getDescription = (): string => this.description;
