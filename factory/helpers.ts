@@ -1,5 +1,4 @@
 import {cream, juice, soda, syrup, water} from "./components";
-import {CupSize} from "./cup-size-factory";
 
 const reader = require("readline-sync");
 
@@ -24,16 +23,4 @@ export const requestComponentsChose = (type: 'basis' | 'topping')  => {
 
     const answer = reader.question(question);
     return componentsList[parseInt(answer, 10) - 1];
-}
-
-export const  getPriceMultiplierBasedOnVolume = (volume: CupSize) => {
-    switch (volume) {
-        case CupSize.M:
-            return 1.2;
-        case CupSize.L:
-            return 1.4;
-        case CupSize.S:
-        default:
-            return 1;
-    }
 }

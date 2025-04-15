@@ -1,4 +1,6 @@
 import {Beverage} from "./beverages";
+import {Cup} from "./cup-size-factory";
+import {BeverageComponent} from "./components";
 
 export abstract class CondimentDecorator extends Beverage{
     constructor(
@@ -7,16 +9,19 @@ export abstract class CondimentDecorator extends Beverage{
     ) {
         super(_beverage.description);
         this._condiments = [..._beverage.condiments, description];
-        this._ingredients = [..._beverage.ingredients];
-        this._volume = _beverage.volume;
     }
 
     get beverage() {
         return this._beverage;
     }
 
-    create() {
-        this._beverage.create();
+    set cup(newCup: Cup) {
+        this._beverage.cup = newCup;
+        this._cup = newCup;
+    }
+
+    chooseIngredients(): BeverageComponent[] {
+        return this._beverage.chooseIngredients();
     }
 }
 

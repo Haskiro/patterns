@@ -1,13 +1,13 @@
 import {BeverageComponent} from "./components";
-import {CupSize} from "./cup-size-factory";
+import {Cup} from "./cup-size-factory";
 import {BasisType, BeverageComponentsFactory, ToppingType} from "./beverage-components-factory";
-import {getPriceMultiplierBasedOnVolume, requestComponentsChose} from "./helpers";
+import {requestComponentsChose} from "./helpers";
 
 export abstract class Beverage {
-    protected _ingredients: BeverageComponent[] = [];
+    private _ingredients: BeverageComponent[] = [];
     protected componentsFactory = new BeverageComponentsFactory();
     protected _condiments: string[] = [];
-    protected _volume: CupSize;
+    protected _cup: Cup;
 
     constructor(private _description: string) {}
 
@@ -19,16 +19,8 @@ export abstract class Beverage {
         return this._condiments
     }
 
-    get ingredients() {
-        return this._ingredients;
-    }
-
-    set volume(size: CupSize) {
-        this._volume = size;
-    }
-
-    get volume() {
-        return this._volume;
+    set cup(newCup: Cup) {
+        this._cup = newCup;
     }
 
     displayBeverage() {
@@ -40,15 +32,19 @@ export abstract class Beverage {
         console.log('НАПИТОК\n');
 
         console.log(`Название: ${this._description}\n` +
-            `Объем: ${this._volume}л.\n` +
+            `Объем: ${this._cup.volume}л.\n` +
             `${ingredientsInline}` +
             `${condimentsInline}` +
             `Цена: ${this.cost()} руб.`);
     }
 
+    create() {
+        this._ingredients = this.chooseIngredients();
+    }
+
     abstract cost(): number;
 
-    abstract create(): void;
+    abstract chooseIngredients(): BeverageComponent[]
 }
 
 export class HouseBlend extends Beverage {
@@ -56,10 +52,10 @@ export class HouseBlend extends Beverage {
         super('House Blend');
     }
     cost(): number {
-        return 200 * getPriceMultiplierBasedOnVolume(this.volume);
+        return 200 * this._cup.coefficient;
     }
 
-    create() {}
+    chooseIngredients = () => []
 }
 
 export class DarkRoast extends Beverage {
@@ -67,10 +63,10 @@ export class DarkRoast extends Beverage {
         super('Dark Roast');
     }
     cost(): number {
-        return 250 * getPriceMultiplierBasedOnVolume(this.volume);;
+        return 250 * this._cup.coefficient;
     }
 
-    create() {}
+    chooseIngredients = () => []
 }
 
 export class Espresso extends Beverage {
@@ -78,10 +74,10 @@ export class Espresso extends Beverage {
         super('Espresso');
     }
     cost(): number {
-        return 230 * getPriceMultiplierBasedOnVolume(this.volume);;
+        return 230 * this._cup.coefficient;
     }
 
-    create() {}
+    chooseIngredients = () => []
 }
 
 export class Decaf extends Beverage {
@@ -89,10 +85,10 @@ export class Decaf extends Beverage {
         super('Decaf');
     }
     cost(): number {
-        return 180 * getPriceMultiplierBasedOnVolume(this.volume);;
+        return 180 * this._cup.coefficient;
     }
 
-    create() {}
+    chooseIngredients = () => []
 }
 
 export class Tea extends Beverage {
@@ -101,18 +97,18 @@ export class Tea extends Beverage {
     }
 
     cost(): number {
-        return 140 * getPriceMultiplierBasedOnVolume(this.volume);;
+        return 140 * this._cup.coefficient;
     }
 
-    create() {
+    chooseIngredients() {
         const basisType = requestComponentsChose('basis') as BasisType;
         const toppingType = requestComponentsChose('topping') as ToppingType;
 
-        this.ingredients.push(
+        return [
             this.componentsFactory.createBasis(basisType),
             this.componentsFactory.createMain('tea'),
             this.componentsFactory.createTopping(toppingType)
-        )
+        ]
     }
 }
 
@@ -122,17 +118,17 @@ export class Cocktail extends Beverage {
     }
 
     cost(): number {
-        return 240 * getPriceMultiplierBasedOnVolume(this.volume);;
+        return 240 * this._cup.coefficient;
     }
 
-    create() {
+    chooseIngredients() {
         const basisType = requestComponentsChose('basis') as BasisType;
 
-        this.ingredients.push(
+        return [
             this.componentsFactory.createBasis(basisType),
             this.componentsFactory.createMain('fruits'),
             this.componentsFactory.createTopping('soda')
-        )
+        ]
     }
 }
 
@@ -142,17 +138,17 @@ export class FruitFresh extends Beverage {
     }
 
     cost(): number {
-        return 300 * getPriceMultiplierBasedOnVolume(this.volume);;
+        return 300 * this._cup.coefficient;
     }
 
-    create() {
+    chooseIngredients() {
         const toppingType = requestComponentsChose('topping') as ToppingType;
 
-        this.ingredients.push(
+        return [
             this.componentsFactory.createBasis('juice'),
             this.componentsFactory.createMain('fruits'),
             this.componentsFactory.createTopping(toppingType)
-        )
+        ]
     }
 }
 
@@ -162,16 +158,16 @@ export class CustomCoffee extends Beverage {
     }
 
     cost(): number {
-        return 250 * getPriceMultiplierBasedOnVolume(this.volume);;
+        return 250 * this._cup.coefficient;
     }
 
-    create() {
+    chooseIngredients() {
         const toppingType = requestComponentsChose('topping') as ToppingType;
 
-        this.ingredients.push(
+        return [
             this.componentsFactory.createBasis('water'),
             this.componentsFactory.createMain('coffee'),
             this.componentsFactory.createTopping(toppingType)
-        )
+        ]
     }
 }

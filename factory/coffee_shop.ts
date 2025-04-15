@@ -45,8 +45,6 @@ const answerCup = reader.question('Выберите размер: \n' +
 
 const cupSizeFactory = new CupSizeFactory();
 const cup = cupSizeFactory.createCup(cupSizesList[parseInt(answerCup, 10) - 1])
-chosenBeverage.volume = cup.volume;
-chosenBeverage.create();
 
 const answerCondiments = reader.question('Выберите добавки (для выбора нескольких перечислите их через пробел):\n' +
     '   1: Молоко\n' +
@@ -61,4 +59,6 @@ const order = variants.reduce((acc, variant) => {
     return Decorator ? new Decorator(acc) : acc;
 }, chosenBeverage)
 
+order.cup = cup;
+order.create();
 order.displayBeverage();
