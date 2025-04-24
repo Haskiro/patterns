@@ -1,4 +1,4 @@
-import {Milk, Mocha, Soy, Whip} from "./condiment-decorators";
+import {Mocha, Soy, Whip} from "./condiment-decorators";
 import {Cup, CupSize, CupSizeFactory} from "./cup-size-factory";
 import {Croissant, Desert, Pie, Strudel} from "./deserts";
 import {Beverage} from "./beverages";
@@ -9,7 +9,6 @@ import {BasisType, BeverageComponentsFactory, ToppingType} from "./beverage-comp
 const reader = require("readline-sync");
 
 const condimentsDecoratorsList = [
-    Milk,
     Mocha,
     Soy,
     Whip
@@ -108,7 +107,7 @@ abstract class Order {
 
     protected pay() {
         console.log('ОПЛАТА')
-        reader.question(`Общая стоимость: ${this.beverage.cost() + (this.desert.cost || 0)} руб.Выберите тип оплаты:\n` +
+        reader.question(`Общая стоимость: ${this.beverage.cost() + (this.desert?.cost || 0)} руб.Выберите тип оплаты:\n` +
             '   1: По карте\n' +
             '   2: Наличными\n' +
             '   3: QR-кодом\n');

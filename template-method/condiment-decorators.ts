@@ -19,20 +19,6 @@ export abstract class CondimentDecorator extends Beverage{
         this._beverage.cup = newCup;
         this._cup = newCup;
     }
-
-    chooseIngredients(): BeverageComponent[] {
-        return this._beverage.chooseIngredients();
-    }
-}
-
-export class Milk extends CondimentDecorator {
-    constructor(beverage: Beverage) {
-        super(beverage, 'Молоко');
-    }
-
-    cost(): number {
-        return 20 + this.beverage.cost();
-    }
 }
 
 export class Mocha extends CondimentDecorator {

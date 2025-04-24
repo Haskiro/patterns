@@ -27,13 +27,13 @@ export abstract class Beverage {
 
     displayBeverage() {
         const ingredientsInline =  this._ingredients.length > 0 ?
-            `Ингредиенты: ${this._ingredients.map(el => el.description).join(', ')}\n` : ''
+            `Ингредиенты: ${this._ingredients.map(el => el.description).join(', ')}` : ''
         const condimentsInline = this.condiments.length > 0 ?
             `Добавки: ${this.condiments.join(', ')}` : ''
 
         console.log(`Напиток: ${this._description}(${this.isHot ? 'Горячий' : 'Холодный'})\n` +
-            `Объем: ${this._cup.volume}л.${ingredientsInline || condimentsInline ? '\n' : ''}` +
-            `${ingredientsInline}` +
+            `Объем: ${this._cup.volume}л.${(ingredientsInline || condimentsInline) ? '\n' : ''}` +
+            `${ingredientsInline}${condimentsInline && '\n'}` +
             `${condimentsInline}`);
     }
 
